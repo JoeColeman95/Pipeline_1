@@ -1,0 +1,4 @@
+steps:
+  - label: "Trigger build"
+    command: "echo 'Triggered!'"
+    key: build
