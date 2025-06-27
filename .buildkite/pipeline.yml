@@ -1,4 +1,8 @@
 steps:
-  - label: "Trigger build"
-    command: "echo 'Triggered!'"
-    key: build
+  - label: ":postgres: Migrate DB"
+    commands:
+        - echo "--- Running DB migration"
+        - token=$(buildkite-agent lock acquire db-migration-lock)
+        - ./.buildkite/scripts/hello_world.sh
+        - buildkite-agent lock release db-migration-lock "${token}"
+    key: "migrate-db"
