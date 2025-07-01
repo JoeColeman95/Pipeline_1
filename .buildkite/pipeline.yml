@@ -3,6 +3,6 @@ steps:
     commands:
         - echo "+++ Running DB migration"
         - token=$(buildkite-agent lock acquire db-migration-lock)
-        - ./scripts/hello_world.sh
+        - ./.buildkite/scripts/hello_world.sh
         - buildkite-agent lock release db-migration-lock "$${token}"
     key: "migrate-db"
