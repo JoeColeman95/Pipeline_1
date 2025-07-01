@@ -6,3 +6,4 @@ steps:
         - ./.buildkite/scripts/hello_world.sh
         - buildkite-agent lock release db-migration-lock "$${token}"
     key: "migrate-db"
+
