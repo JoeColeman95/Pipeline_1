@@ -1,7 +1,7 @@
 steps:
   - label: "Hello World"
     commands:
-        - echo "Hello World!
+        - echo "Hello World!"
     key: "migrate-db"
 
 
