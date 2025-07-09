@@ -1,18 +1,16 @@
 steps:
-  - label: "Command"
-    commands:
-      - echo "Hello World"
-    key: hello-world
+  - label: ":buildkite: Start Notification"
+    command: "echo 'hello world'"
 
-  - block: "Release"
-    prompt: "Fill out the details for release"
-    fields:
-      - text: "Release Name"
-        key: "release-name"
-    key: release-block
-    depends_on: hello-world
+  - label: ":pipeline: Pipeline upload w/ success"
+    command: "buildkite-agent pipeline upload .buildkite/pipeline-success.yml"
 
-  - label: "New Pipeline"
-    commands:
-      - sh ./.buildkite/scripts/new_build.sh
-    depends_on: release-block
+  - label: ":pipeline: Pipeline upload w/ failure"
+    command: "buildkite-agent pipeline upload .buildkite/pipeline-fail.yml"
+
+  - wait: ~
+    continue_on_failure: true
+
+  - label: ":buildkite: End Notification"
+    command: "echo 'Works as expected!'"
+
