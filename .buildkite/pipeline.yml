@@ -14,7 +14,7 @@ steps:
 
   - label: ":x: Build Failed Notification"
     command: "echo 'Build failed'"
-    if: build.state == "failing"
+    if: build.state == "failing" || build.state == "failed" || build.state == "started_failing"
 
   - label: ":white_check_mark: Build Success Notification"
     command: "echo 'Build not failing!'"
