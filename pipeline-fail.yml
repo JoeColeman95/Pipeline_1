@@ -1,0 +1,3 @@
+steps:
+  - label: ":buildkite: exit 1"
+    command: "exit 1"
