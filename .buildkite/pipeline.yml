@@ -12,6 +12,11 @@ steps:
   - wait: ~
     continue_on_failure: true
 
-  - label: ":buildkite: End Notification"
-    command: "echo 'Works as expected!'"
+  - label: ":x: Build Failed Notification"
+    command: "echo 'Build failed'"
+    if: build.state == "failing"
+
+  - label: ":white_check_mark: Build Success Notification"
+    command: "echo 'Build not failing!'"
+    if: build.state != "failed"
 
