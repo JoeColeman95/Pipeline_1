@@ -11,12 +11,6 @@ steps:
 
   - group: ":buildkite: End Notification"
     steps:
-      - label: ":buildkite: Start Notification"
-        command: "exit 1"
-
-      - wait: ~
-        continue_on_failure: true
-
       - label: ":buildkite: End Notification"
         command: "echo 'Build NOT failed!'"
         if : build.state == "passed"
