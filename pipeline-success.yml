@@ -1,0 +1,3 @@
+steps:
+  - label: ":buildkite: Hello"
+    command: "echo 'Hello World'"
