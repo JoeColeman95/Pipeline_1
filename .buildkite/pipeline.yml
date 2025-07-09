@@ -13,8 +13,8 @@ steps:
     steps:
       - label: ":buildkite: End Notification"
         command: "echo 'Build NOT failed!'"
-        if : build.state == "passed"
+        if : build.state == "running" || build.state == "passed" || build.state == "started"
 
       - label: ":buildkite: End Notification"
         command: "echo 'Build failed!'"
-        if: build.state == "failing"
+        if: build.state == "failing" || build.state == "failed"
