@@ -6,5 +6,8 @@ steps:
   - label: ":pipeline: Pipeline upload w/ failure"
     command: "buildkite-agent pipeline upload .buildkite/pipeline-fail.yml"
 
+  - wait:
+    continue_on_failure: true
+
   - label: ":pipeline: Pipeline end"
     command: "buildkite-agent pipeline upload .buildkite/pipeline-end.yml"
