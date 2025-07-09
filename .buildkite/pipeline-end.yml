@@ -1,0 +1,10 @@
+steps:
+  - group: ":buildkite: End Notification"
+    steps:
+      - label: ":buildkite: End Notification"
+        command: "echo 'Build NOT failed!'"
+        if: build.state != "failing" && build.state != "failed"
+
+      - label: ":buildkite: End Notification"
+        command: "echo 'Build failed!'"
+        if: build.state == "failing" && build.state == "failed"
