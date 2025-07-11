@@ -10,6 +10,6 @@ steps:
           - BUILDKITE_AGENT_AWS_KMS_KEY
     command:
       - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $BUILDKITE_AGENT_AWS_KMS_KEY"
-      - ls -la $BUILDKITE_AGENT_BINARY_PATH || echo "BUILDKITE_AGENT_BINARY_PATH not set"
-      - chmod +x $BUILDKITE_AGENT_BINARY_PATH
-      - buildkite-agent pipeline upload
+      - ls -la /usr/bin/buildkite-agent
+      - chmod +x /usr/bin/buildkite-agent
+      - /usr/bin/buildkite-agent pipeline upload
