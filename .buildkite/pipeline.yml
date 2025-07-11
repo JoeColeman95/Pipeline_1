@@ -1,6 +1,7 @@
 configs:
   - &docker-with-buildkite-agent-cli
     docker#v5.12.0:
+      image: "alpine:latest"
       propagate-environment: true
       mount-buildkite-agent: true
       mount-ssh-agent: true
