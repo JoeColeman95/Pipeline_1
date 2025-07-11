@@ -1,17 +1,13 @@
-configs:
-  - &docker-with-buildkite-agent-cli
-    docker#v5.12.0:
-      image: "alpine:latest"
-      propagate-environment: true
-      mount-buildkite-agent: true
-      mount-ssh-agent: true
-      environment:
-        - BUILDKITE_AGENT_AWS_KMS_KEY="test-key"
-
 steps:
   - label: "Test docker"
     plugins:
-      - *docker-with-buildkite-agent-cli
+      docker#v5.12.0:
+        image: "alpine:latest"
+        propagate-environment: true
+        mount-buildkite-agent: true
+        mount-ssh-agent: true
+        environment:
+          - BUILDKITE_AGENT_AWS_KMS_KEY
     command:
       - echo "--- Checking environment variables"
       - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $BUILDKITE_AGENT_AWS_KMS_KEY"
