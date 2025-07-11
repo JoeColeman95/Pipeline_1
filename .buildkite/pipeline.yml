@@ -1,10 +1,19 @@
+configs:
+  - &docker-with-buildkite-agent-cli
+    docker#v5.12.0:
+      propagate-environment: true
+      mount-buildkite-agent: true
+      mount-ssh-agent: true
+      environment:
+        - BUILDKITE_AGENT_AWS_KMS_KEY: hello-world
 
 steps:
-  - label: ":pipeline: Pipeline upload w/ success"
-    command: "buildkite-agent pipeline upload .buildkite/pipeline-success.yml"
-
-  - label: ":pipeline: Pipeline upload w/ failure"
-    command: "buildkite-agent pipeline upload .buildkite/pipeline-fail.yml"
-
-  - label: ":pipeline: Pipeline end"
-    command: "buildkite-agent pipeline upload .buildkite/pipeline-end.yml"
+  - label: "Test docker"
+    plugins:
+      - *docker-with-buildkite-agent-cli
+    command:
+      - echo "--- Checking environment variables"
+      - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $BUILDKITE_AGENT_AWS_KMS_KEY"
+      - echo "BUILDKITE_AGENT_CONFIG = $BUILDKITE_AGENT_CONFIG"
+      - echo "--- Checking buildkite-agent config file"
+      - cat /etc/buildkite-agent/buildkite-agent.cfg
