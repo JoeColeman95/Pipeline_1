@@ -8,5 +8,4 @@ steps:
         environment:
           - BUILDKITE_AGENT_AWS_KMS_KEY
     command:
-      - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $BUILDKITE_AGENT_AWS_KMS_KEY"
       - buildkite-agent pipeline upload .buildkite/pipeline.yml
