@@ -11,3 +11,4 @@ steps:
     command:
       - echo "--- Checking environment variables"
       - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $BUILDKITE_AGENT_AWS_KMS_KEY"
+      - buildkite-agent pipeline upload
