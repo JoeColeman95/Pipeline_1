@@ -9,6 +9,7 @@ steps:
         environment:
           - BUILDKITE_AGENT_AWS_KMS_KEY
     command:
-      - echo "--- Checking environment variables"
       - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $BUILDKITE_AGENT_AWS_KMS_KEY"
+      - ls -la $BUILDKITE_AGENT_BINARY_PATH || echo "BUILDKITE_AGENT_BINARY_PATH not set"
+      - chmod +x $BUILDKITE_AGENT_BINARY_PATH
       - buildkite-agent pipeline upload
