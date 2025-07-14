@@ -1,13 +1,21 @@
 steps:
-  - label: "Test docker"
-    plugins:
-      docker#v5.12.0:
-        image: "buildkite/agent:latest"
-        propagate-environment: true
-        mount-ssh-agent: true
-        environment:
-          - BUILDKITE_AGENT_AWS_KMS_KEY
-        entrypoint: "/bin/sh"
-    command:
-      - echo "BUILDKITE_AGENT_AWS_KMS_KEY = $$BUILDKITE_AGENT_AWS_KMS_KEY"
-      - buildkite-agent pipeline upload .buildkite/pipeline.yml
+  - commands: |
+      buildkite-agent pipeline upload <<YAML
+        env:
+          ENV_VAR: "staging"
+
+        steps:
+          - wait
+          - command: echo $${ENV}
+            env:
+              ENV_VAR: "staging-2"
+      YAML
+  - commands: |
+      buildkite-agent pipeline upload <<YAML
+        env:
+          ENV_VAR: "prod"
+
+        steps:
+          - wait
+          - command: echo $${ENV}
+      YAML
