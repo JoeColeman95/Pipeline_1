@@ -1,21 +1,3 @@
 steps:
   - commands: |
-      buildkite-agent pipeline upload <<YAML
-        env:
-          ENV_VAR: "staging"
-
-        steps:
-          - wait
-          - command: echo $${ENV}
-            env:
-              ENV_VAR: "staging-2"
-      YAML
-  - commands: |
-      buildkite-agent pipeline upload <<YAML
-        env:
-          ENV_VAR: "prod"
-
-        steps:
-          - wait
-          - command: echo $${ENV}
-      YAML
+      buildkite-agent pipeline upload .buildkite/pipeline-success.yml
