@@ -1,25 +1,7 @@
 steps:
   - label: "Upload staging pipeline"
     command: |
-      buildkite-agent pipeline upload <<YAML
-        env:
-          ENV_VAR: "staging"
+      buildkite-agent pipeline upload ./buildkite/staging.yml
 
-        steps:
-          - wait
-          - command: echo \$\${ENV_VAR}
-            env:
-              ENV_VAR: "staging-2"
-      YAML
   - label: "Upload prod pipeline"
-    command: |
-      buildkite-agent pipeline upload <<YAML
-        env:
-          ENV_VAR: "prod"
-
-        steps:
-          - wait
-          - command: echo \$\${ENV_VAR}
-            env:
-              ENV_VAR: "prod-override"
-      YAML
+    command: buildkite-agent pipeline upload .buildkite/prod.yml
