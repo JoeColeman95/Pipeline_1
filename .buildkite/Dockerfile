@@ -6,3 +6,4 @@ RUN echo "Installing dependencies and utilities..." && npm install -g nodemon es
 COPY . .
 EXPOSE 3000
 CMD ["node", "-e", "console.log('Hello from cached build v5 - final layer cache test!'); setTimeout(() => {}, 60000)"]
+#new commit
