@@ -1,10 +1,15 @@
-#!/bin/bash
+echo "~~~ Uploading pipeline"
+cat ../test1.yml
 
-RELEASE_NAME=$(buildkite-agent meta-data get release-name)
-
-curl -H "Authorization: Bearer $BUILDKITE_API_TOKEN" \
-  -X POST "https://api.buildkite.com/v2/organizations/joe-playground/pipelines/pipeline-1/builds" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"message\": \"$RELEASE_NAME\"
-  }"
+# Handle duplicate key errors gracefully
+if ! upload_output=$(buildkite-agent pipeline upload ../test.yml 2>&1); then
+  if echo "$upload_output" | grep -q "already been used by another step"; then
+    echo "Pipeline upload failed due to duplicate keys, ignoring error"
+    echo "$upload_output"
+  else
+    echo "Pipeline upload failed: "$upload_output"
+    exit 1
+  fi
+else
+  echo "Pipeline upload successful"
+fi
