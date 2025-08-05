@@ -7,7 +7,7 @@ if ! upload_output=$(buildkite-agent pipeline upload .buildkite/test.yml 2>&1); 
     echo "Pipeline upload failed due to duplicate keys, ignoring error"
     echo "$upload_output"
   else
-    echo "Pipeline upload failed: "$upload_output"
+    echo "Pipeline upload failed: $upload_output"
     exit 1
   fi
 else
