@@ -1,0 +1,8 @@
+steps:
+  - label: "echo 1"
+    command: "echo 'Hello, World!'"
+    key: "step1"
+
+  - label: "echo 2"
+    command: "echo 'Hello, World!'"
+    key: "step2"
