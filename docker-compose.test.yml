@@ -1,4 +1,4 @@
 services:
   app:
-    image: alpine:latest
-    command: ["echo", "Hello from test app!"]
+    build: .
+    image: app:latest
