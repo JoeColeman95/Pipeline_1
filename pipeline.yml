@@ -12,7 +12,7 @@ steps:
   - wait
 
   - label: ":test_tube: Simulate Tests"
-    depends-on: "build"
+    depends_on: "build"
     agents:
       queue: "default"
     plugins:
