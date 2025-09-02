@@ -1,0 +1,54 @@
+steps:
+  - key: "build"
+    label: ":docker: Build & Push to Build Registry"
+    agents:
+      queue: "default"
+    plugins:
+    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
+        push: "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER}"
+        build: "app"
+        config: "docker-compose.test.yml"
+
+  - wait
+
+  - label: ":test_tube: Simulate Tests"
+    depends-on: "build"
+    agents:
+      queue: "default"
+    plugins:
+    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
+        run: "app"
+        require-prebuild: true
+        config: "docker-compose.test.yml"
+    command: "echo 'Running tests...'"
+
+  - wait
+
+  - block: "Clear Docker & Test Different Agent"
+    prompt: "Stop agent, clear Docker, then continue to test cross-agent behavior"
+
+  - label: ":rocket: Push to Production Registry (Without Fix)"
+    agents:
+      queue: "default"
+    plugins:
+    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
+        config: "docker-compose.test.yml"
+        push:
+        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest-${BUILDKITE_BUILD_NUMBER}"
+        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest-${BUILDKITE_COMMIT:0:6}"
+        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest"
+    soft_fail: true
+
+  - label: ":rocket: Push to Production Registry (With Fix)"
+    agents:
+      queue: "default"
+    command: |
+      docker pull 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER}
+      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} app:latest
+    plugins:
+    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
+        config: "docker-compose.test.yml"
+        push:
+        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}"
+        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}"
+        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed"
