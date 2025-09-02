@@ -42,9 +42,6 @@ steps:
   - label: ":rocket: Push to Production Registry (With Fix)"
     agents:
       queue: "default"
-    command: |
-      docker pull 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER}
-      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} app:latest
     plugins:
     - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
         config: "docker-compose.test.yml"
@@ -52,3 +49,4 @@ steps:
         - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}"
         - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}"
         - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed"
+        require-prebuild: true
