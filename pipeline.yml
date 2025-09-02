@@ -39,14 +39,19 @@ steps:
         - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest"
     soft_fail: true
 
-  - label: ":rocket: Push to Production Registry (With Fix)"
+  - label: ":rocket: Push with Plain Docker (With Fix)"
     agents:
       queue: "default"
-    plugins:
-    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
-        config: "docker-compose.test.yml"
-        push:
-        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}"
-        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}"
-        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed"
-        require-prebuild: true
+    command: |
+      # Pull the built image
+      docker pull 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER}
+      
+      # Tag it with the target names
+      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}
+      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}
+      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed
+      
+      # Push all the tags
+      docker push 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}
+      docker push 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}
+      docker push 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed
