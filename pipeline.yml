@@ -16,7 +16,7 @@
     - label: "Deploy Multi-arch"
       if_changed: "**/*"
       depends_on:
-        - key: "build"
+        - "build"
       command: |
         echo "Both architectures built successfully!"
         echo "Would deploy multi-arch manifest here"
