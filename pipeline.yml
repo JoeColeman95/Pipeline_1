@@ -1,57 +1,22 @@
-steps:
-  - key: "build"
-    label: ":docker: Build & Push to Build Registry"
-    agents:
-      queue: "default"
-    plugins:
-    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
-        push: "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER}"
-        build: "app"
-        config: "docker-compose.test.yml"
+  steps:
+    - label: "Build and Test - {{matrix}}"
+      matrix:
+        - "amd64"
+        - "arm64"
+      if_changed: "**/*"
+      command: |
+        echo "Building for architecture: {{matrix}}"
+        echo "This would normally build your container for {{matrix}}"
+        echo "Files that changed in this build:"
+        git diff --name-only HEAD~1 || echo "No previous commit to diff against"
+      agents:
+        queue: ${AGENT_QUEUE:-"default"}
 
-  - wait
-
-  - label: ":test_tube: Simulate Tests"
-    depends_on: "build"
-    agents:
-      queue: "default"
-    plugins:
-    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
-        run: "app"
-        require-prebuild: true
-        config: "docker-compose.test.yml"
-    command: "echo 'Running tests...'"
-
-  - wait
-
-  - block: "Clear Docker & Test Different Agent"
-    prompt: "Stop agent, clear Docker, then continue to test cross-agent behavior"
-
-  - label: ":rocket: Push to Production Registry (Without Fix)"
-    agents:
-      queue: "default"
-    plugins:
-    - github.com/buildkite-plugins/docker-compose-buildkite-plugin#v5.10.0:
-        config: "docker-compose.test.yml"
-        push:
-        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest-${BUILDKITE_BUILD_NUMBER}"
-        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest-${BUILDKITE_COMMIT:0:6}"
-        - "app:097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:latest"
-    soft_fail: true
-
-  - label: ":rocket: Push with Plain Docker (With Fix)"
-    agents:
-      queue: "default"
-    command: |
-      # Pull the built image
-      docker pull 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER}
-      
-      # Tag it with the target names
-      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}
-      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}
-      docker tag 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:build-${BUILDKITE_BUILD_NUMBER} 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed
-      
-      # Push all the tags
-      docker push 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_BUILD_NUMBER}
-      docker push 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed-${BUILDKITE_COMMIT:0:6}
-      docker push 097340723131.dkr.ecr.us-east-1.amazonaws.com/joe-test-app:fixed
+    - label: "Deploy Multi-arch"
+      if_changed: "**/*"
+      depends_on:
+        - step: "Build and Test - amd64"
+        - step: "Build and Test - arm64"
+      command: |
+        echo "Both architectures built successfully!"
+        echo "Would deploy multi-arch manifest here"
