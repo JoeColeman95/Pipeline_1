@@ -1,6 +1,6 @@
   steps:
     - label: "Build and Test - {{matrix}}"
-      key: "build-{{matrix}}"
+      key: "build"
       matrix:
         - "amd64"
         - "arm64"
@@ -16,8 +16,7 @@
     - label: "Deploy Multi-arch"
       if_changed: "**/*"
       depends_on:
-        - key: "build-amd64"
-        - key: "build-arm64"
+        - key: "build"
       command: |
         echo "Both architectures built successfully!"
         echo "Would deploy multi-arch manifest here"
