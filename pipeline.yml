@@ -1,17 +1,18 @@
   common_steps: &microservice_build
-    group:
-    - label: "Build {{matrix}} - ${SERVICE_NAME}"
-      key: "build-{{matrix}}"
-      matrix: ["amd64", "arm64"]
-      command: |
-        echo "Building ${SERVICE_NAME} for {{matrix}}"
+    - group:
+      steps:
+      - label: "Build {{matrix}} - ${SERVICE_NAME}"
+        key: "build-{{matrix}}"
+        matrix: ["amd64", "arm64"]
+        command: |
+          echo "Building ${SERVICE_NAME} for {{matrix}}"
 
-    - label: "Test - ${SERVICE_NAME}"
-      key: "test-${SERVICE_NAME}"
-      depends_on:
-        - "build-amd64"
-        - "build-arm64"
-      command: "echo Testing ${SERVICE_NAME}"
+      - label: "Test - ${SERVICE_NAME}"
+        key: "test-${SERVICE_NAME}"
+        depends_on:
+          - "build-amd64"
+          - "build-arm64"
+        command: "echo Testing ${SERVICE_NAME}"
 
   steps:
     - <<: *microservice_build
