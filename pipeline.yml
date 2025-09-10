@@ -8,8 +8,8 @@
     - label: "Test - ${SERVICE_NAME}"
       key: "test-${SERVICE_NAME}"
       depends_on:
-        - key: "build-amd64-${SERVICE_NAME}"
-        - key: "build-arm64-${SERVICE_NAME}"
+        - "build-amd64-${SERVICE_NAME}"
+        - "build-arm64-${SERVICE_NAME}"
       command: "echo Testing ${SERVICE_NAME}"
 
   steps:
