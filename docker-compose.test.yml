@@ -2,5 +2,3 @@ services:
   app:
     build: .
     image: app:latest
-    environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://host.docker.internal:4317
