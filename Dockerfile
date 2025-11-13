@@ -1,9 +1,9 @@
-FROM alpine:latest
+FROM python:3.11-slim
 
-RUN apk add --no-cache curl
+RUN pip install opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp-proto-grpc
 
 WORKDIR /app
 
-COPY . .
+COPY app.py .
 
-CMD ["echo", "Hello from test app!"]
+CMD ["python", "app.py"]
