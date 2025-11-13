@@ -6,6 +6,8 @@ print("Container Environment Variables:")
 print(f"TRACEPARENT: {os.getenv('TRACEPARENT', 'NOT SET')}")
 print(f"TRACESTATE: {os.getenv('TRACESTATE', 'NOT SET')}")
 print(f"OTEL_EXPORTER_OTLP_ENDPOINT: {os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'NOT SET')}")
+print(f"OTEL_EXPORTER_OTLP_HEADERS: {os.getenv('OTEL_EXPORTER_OTLP_HEADERS', 'NOT SET')}")
+print(f"OTEL_EXPORTER_OTLP_PROTOCOL: {os.getenv('OTEL_EXPORTER_OTLP_PROTOCOL', 'NOT SET')}")
 print("="*50)
 
 try:
