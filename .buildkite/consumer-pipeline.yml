@@ -1,0 +1,22 @@
+# Consumer pipeline that uses anchors from base-anchors.yml
+# The anchor is defined in base-anchors.yml and referenced here
+
+steps:
+  # First, say hello world
+  - label: "Consumer Hello World"
+    command: |
+      echo "Hello from the consumer pipeline!"
+      echo "About to use the shared anchor..."
+
+  # Now use the imported anchor
+  - <<: *hello_world_step
+    key: "reused-hello-world"
+    label: "🌍 Hello World (Reused Anchor)"
+
+  # Additional step to prove concept
+  - label: "POC: Anchor Reuse Success"
+    depends_on: "reused-hello-world"
+    command: |
+      echo "✅ Proof of Concept Complete!"
+      echo "Successfully reused the hello_world_step anchor"
+      echo "This demonstrates YAML anchor sharing between pipelines"

@@ -1,0 +1,19 @@
+anchors:
+  hello_world_step: &hello_world_step
+    label: "🌍 Hello World"
+    command: |
+      echo "Hello World from base anchor!"
+      echo "This is a reusable step"
+      echo "Current time: $(date)"
+    timeout_in_minutes: 5
+    retry:
+      automatic:
+        - exit_status: "*"
+          limit: 2
+
+steps:
+  - <<: *hello_world_step
+    key: "base-hello-world"
+
+  - label: "Base Pipeline Additional Step"
+    command: echo "This is the base pipeline doing its own work"
