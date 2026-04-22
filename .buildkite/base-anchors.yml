@@ -1,5 +1,0 @@
-anchors:
-  hello_world_step: &hello_world_step
-    label: "Hello World"
-    command: |
-      echo "Hello World"

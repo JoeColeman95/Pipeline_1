@@ -1,4 +1,0 @@
-steps:
-  - <<: *hello_world_step
-    key: "reused-hello-world"
-    label: "Hello World (Reused Anchor)"

@@ -1,3 +1,24 @@
 steps:
-  - commands: |
-      buildkite-agent pipeline upload .buildkite/pipeline-success.yml
+  - group: "kinesis"
+    if_changed: "kinesis/**"
+    steps:
+      - if: build.source != "schedule"
+        block: ":rocket: Release kinesis?"
+        prompt: "Click to release the kinesis module"
+        blocked_state: "passed"
+      - label: ":github::terraform: Tag module - kinesis"
+        command: ".buildkite/update_tag.sh kinesis"
+        agents:
+          - "queue=default"
+
+  - group: "kms"
+    if_changed: "kms/**"
+    steps:
+      - if: build.source != "schedule"
+        block: ":rocket: Release kms?"
+        prompt: "Click to release the kms module"
+        blocked_state: "passed"
+      - label: ":github::terraform: Tag module - kms"
+        command: ".buildkite/update_tag.sh kms"
+        agents:
+          - "queue=default"
