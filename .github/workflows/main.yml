@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Buildkite Build
-        uses: buildkite/trigger-pipeline-action@SUP-5009/Retry-logic
+        uses: buildkite/trigger-pipeline-action@v2.4.1
         with:
           buildkite_api_access_token: ${{ secrets.BUILDKITE_API_TOKEN }}
           pipeline: "joe-playground/pipeline-1"
