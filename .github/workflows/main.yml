@@ -1,0 +1,16 @@
+name: Test Retry Logic
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Buildkite Build
+        uses: buildkite/trigger-pipeline-action@SUP-5009/Retry-logic
+        with:
+          buildkite_api_access_token: ${{ secrets.BUILDKITE_API_TOKEN }}
+          pipeline: "joe-playground/pipeline-1"
+          wait: true
+          retry_max_attempts: 3
+          retry_base_delay: 1
