@@ -21,4 +21,4 @@ steps:
       - label: ":github::terraform: Tag module - kms"
         command: ".buildkite/update_tag.sh kms"
         agents:
-          - "queue=change"
+          - "queue=changes"
